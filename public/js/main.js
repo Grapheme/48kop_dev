@@ -58,6 +58,29 @@ var App = (function(){
 
 	$(document).on('click', '.i-will', function(e){
 		$(this).toggleClass('active');
+
+            $.ajax({
+                url: "/ajax/i-will-go",
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    profile_id:  profile_id, 
+                    object_type: 'action', //$(this).data('type'), 
+                    object_id:   $(this).data('action-id'), 
+                },
+            }).done(function(data){
+                //data = $.parseJSON(data.toString());
+                console.log(data);
+
+                if (data.also_go == 1)
+                    alert("Вы уже сказали, что пойдете. Всего пойдет людей: " + (data.count-1));
+                else 
+                    alert("Отлично! Вместе с вами пойдет людей: " + (data.count-1));
+
+            }).fail(function(data){
+                console.log(data);
+            });
+
 	});
 
 	/* popups */
