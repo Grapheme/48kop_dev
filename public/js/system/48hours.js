@@ -55,7 +55,7 @@ function uloginauth(token) {
             $(".popup.auth").addClass("hidden");
             $(".overlay").addClass("hidden");
 
-            alert("Добро пожаловать, "+data.first_name+"!");
+            //alert("Добро пожаловать, "+data.first_name+"!");
         } else {
             // Token expired
         }

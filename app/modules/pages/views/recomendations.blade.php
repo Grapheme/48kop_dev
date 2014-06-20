@@ -6,6 +6,10 @@
 
 
 @section('content')
+<?
+if (!Input::get('line'))
+    Redirect("/");
+?>
         <main class="recomendations">
             <h2>
                 Персональные рекомендации для вас<br>

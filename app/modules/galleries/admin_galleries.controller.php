@@ -404,7 +404,8 @@ class AdminGalleriesController extends BaseController {
 			$thumb_delete = File::delete(public_path().Config::get('app-default.galleries_thumb_dir').'/'.$model->name);
 		}
 
-		if(@$db_delete && @$file_delete && @$thumb_delete) {
+		#if(@$db_delete && @$file_delete && @$thumb_delete) {
+		if(@$db_delete) {
 			return Response::json('success', 200);
 		} else {
 			return Response::json('error', 400);

@@ -46,13 +46,6 @@
 						</label>
 					</section>
 
-					<section>
-						<label class="label">Полное описание</label>
-						<label class="textarea">
-							{{ Form::textarea('desc', NULL, array('class'=>'redactor-no-filter redactor_450')) }}
-						</label>
-					</section>
-
 				</fieldset>
 				<footer>
 					<a class="btn btn-default no-margin regular-10 uppercase pull-left btn-spinner" href="{{ URL::previous() }}">

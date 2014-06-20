@@ -52,7 +52,9 @@
     		<table class="table table-striped table-bordered">
     			<thead>
     				<tr>
+                        {{--
     					<th class="col-lg-1 text-center">ID</th>
+                        --}}
     					<th class="col-lg-10 text-center" style="white-space:nowrap;">Продукт</th>
     					<th class="col-lg-1 text-center">Действия</th>
     				</tr>
@@ -60,7 +62,9 @@
     			<tbody>
     			@foreach($products as $product)
     				<tr class="vertical-middle">
+                        {{--
     					<td class="text-center">{{ $product->id }}</td>
+                        --}}
     					<td>
                             {{ $product->title }}
                         </td>

@@ -191,7 +191,7 @@ class Admin48hoursActionsController extends BaseController {
             return App::abort(404);
 
 		$json_request = array('status'=>FALSE, 'responseText'=>'');
-	    $deleted = Place::find($id)->delete();
+	    $deleted = _48hoursAction::find($id)->delete();
 		$json_request['responseText'] = 'Мероприятие удалено';
 		$json_request['status'] = TRUE;
 		return Response::json($json_request,200);

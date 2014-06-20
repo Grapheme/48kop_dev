@@ -18,7 +18,7 @@
 			<table class="table table-striped table-bordered min-table">
 				<thead>
 					<tr>
-						<th class="text-center" style="width:40px">id</th>
+						{{--<th class="text-center" style="width:40px">id</th>--}}
 						<th style="width:100%;"class="text-center">Название</th>
 						<th colspan="2" class="width-250 text-center">Действия</th>
 					</tr>
@@ -26,9 +26,11 @@
 				<tbody>
 				@foreach($advices as $advice)
 					<tr>
+                        {{--
 						<td class="text-center">
 						    {{ $advice->id }}
 						</td>
+                        --}}
 						<td>
 						    {{ $advice->name }}
 						</td>

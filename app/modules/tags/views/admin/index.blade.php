@@ -32,7 +32,7 @@
 					<tr>
 						<td class="text-left">{{ $tag->tag }}</td>
                         <td class="text-center">
-						@if(Allow::action('tags', 'edit'))
+						@if(Allow::action('tags', 'edit') && 0)
 							<a class="btn btn-info margin-right-10" style="display:inline-block" href="{{ link::auth($module['rest'].'/view/'.$tag->tag) }}">
 								Все записи
 							</a>

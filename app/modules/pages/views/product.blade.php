@@ -19,7 +19,7 @@
                     @foreach(Product::orderBy('category_id', 'ASC')->get() as $product)
                     <?
                     $image = $product->photo();
-                    if (is_object($image)) { $image = $image->full(); }
+                    if (is_object($image)) { $image = $image->full(); } else { continue; }
                     ?>
                     <div class="slide" data-cat="{{ $product->category_id }}">
                         @if ($image)

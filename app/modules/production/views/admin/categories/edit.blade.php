@@ -21,12 +21,7 @@
 							{{ Form::text('title') }}
 						</label>
 					</section>
-					<section>
-						<label class="label">Описание</label>
-						<label class="input">
-							{{ Form::text('desc') }}
-						</label>
-					</section>
+
 				</fieldset>
 				<footer>
 					<a class="btn btn-default no-margin regular-10 uppercase pull-left btn-spinner" href="{{URL::previous()}}">
