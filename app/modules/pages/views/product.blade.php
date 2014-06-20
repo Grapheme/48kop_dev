@@ -38,12 +38,34 @@
 @section('scripts')
         {{ HTML::script("js/vendor/fotorama.js") }}
         <script>
-            $(function () {
-                $('.fotorama').fotorama({
+                var $fotoramaDiv = $('.fotorama').fotorama({
                     width: '100%',
                     height: '511',
-                    nav: false
+                    nav: false,
+                    arrows: 'always',
+                    hash: true
+                });              
+
+                $(document).on('click', '.rec-filter-li > a', function(e){
+                    e.preventDefault();
+                    var $cat = $(this).parent().data('cat');
+                    $('.rec-filter-li').removeClass('active');
+                    $(this).parent().addClass('active');
+                    $('.fotorama').removeClass('hidden');
+                    $('.fotorama').not('[data-cat="' + $cat + '"]').addClass('hidden');
                 });
-            });
+
+                var hashOne = window.location.hash.slice(1,2);
+                console.log(hashOne);
+                $('.fotorama').each( function(){
+                    console.log($(this).data('cat'));
+                    if($(this).data('cat') == hashOne) {
+                        console.log(hashOne);
+                        console.log( $(this).data('cat') );
+                        $('.fotorama').addClass('hidden');
+                        $(this).removeClass('hidden');
+                        return false;
+                    }
+                });
         </script>
 @stop

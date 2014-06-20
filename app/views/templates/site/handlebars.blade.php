@@ -13,16 +13,12 @@
                     </header>
                     <div class="column left">
                         <div class="pict" style="background-image:url({{photo}})"></div>
-                        <ul class="likes-ul">
-                            <li class="likes-li">
-                                <img src="img/social/01.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/02.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/03.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/04.jpg" alt="">
-                        </ul>
+                        <script type="text/javascript" src="http://yandex.st/share/share.js"
+charset="utf-8"><{{!}}/script>
+<div class="yashare-auto-init" data-yashareL10n="ru"
+ data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"
+
+></div>
                         <div>
                             <div class="send-email-cont">
                                 <a class="send-email" id="send-email" href="#">Отправить по email</a>
@@ -52,16 +48,12 @@
                     </header>
                     <div class="column left">
                         <div class="pict" style="background-image:url({{photo}})"></div>
-                        <ul class="likes-ul">
-                            <li class="likes-li">
-                                <img src="img/social/01.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/02.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/03.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/04.jpg" alt="">
-                        </ul>
+                        <script type="text/javascript" src="http://yandex.st/share/share.js"
+charset="utf-8"><{{!}}/script>
+<div class="yashare-auto-init" data-yashareL10n="ru"
+ data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"
+
+></div>
                         <div class="i-will" data-action-id="{{id}}">Я пойду</div>
                         <span class="people-count">Уже идут <strong>34</strong></span>
                         <div>
@@ -114,16 +106,12 @@
                         {{{desc}}}
                     </div>
                     <div class="column">
-                        <ul class="likes-ul">
-                            <li class="likes-li">
-                                <img src="img/social/01.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/02.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/03.jpg" alt="">
-                            <li class="likes-li">
-                                <img src="img/social/04.jpg" alt="">
-                        </ul>
+                        <script type="text/javascript" src="http://yandex.st/share/share.js"
+charset="utf-8"><{{!}}/script>
+<div class="yashare-auto-init" data-yashareL10n="ru"
+ data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"
+
+></div>
                         <div>
                             <div class="send-email-cont">
                                 <a class="send-email" id="send-email" href="#">Отправить по email</a>
