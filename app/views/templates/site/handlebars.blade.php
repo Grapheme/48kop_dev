@@ -34,7 +34,7 @@ charset="utf-8"><{{!}}/script>
                     </div>
                 </div>
                 <footer>
-                    Еще лучше дополняет прогулку <a href="#">шоколадный брикет 48 копеек</a>
+                    <!--Еще лучше дополняет прогулку <a href="/product#{{product_id}}">{{product_title}}</a>-->
                 </footer>
             </script>
             <script id="event-template" type="text/x-handlebars-template">
@@ -93,7 +93,7 @@ charset="utf-8"><{{!}}/script>
                     </div>
                 </div>
                 <footer>
-                    Еще лучше дополняет это мероприятие <a href="#">шоколадный брикет 48 копеек</a>
+                    Еще лучше дополняет это мероприятие <a href="/product#{{product_id}}">{{product_title}}</a>
                 </footer>
             </script>
             <script id="advice-template" type="text/x-handlebars-template">
