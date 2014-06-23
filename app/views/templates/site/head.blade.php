@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
 
         {{ HTML::style('css/fonts.css') }}
         {{ HTML::style('css/normalize.css') }}
