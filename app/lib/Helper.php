@@ -69,7 +69,7 @@ class Helper {
         return $full;
     }
 
-    public static function rdate($param, $time=0, $lower = false) {
+    public static function rdate($param = "j M Y", $time=0, $lower = true) {
         if (!is_int($time) && !is_numeric($time))
             $time = strtotime($time);
     	if (intval($time)==0)
@@ -85,16 +85,22 @@ class Helper {
         }
     }
 
-    public static function preview($text, $words = 10, $threedots = true) {
-        $preview = trim(implode(" ", array_slice(explode(" ", strip_tags($text)), 0, $words)));
-        /*
-        Helper::d(
-            " [ " . $preview . " ] " . 
-            mb_strlen($preview) . " < " .
-            " [ " . trim(strip_tags($text)) . " ] " . 
-            mb_strlen(trim(strip_tags($text)))
-        );
-        */
+    public static function preview($text, $count = 10, $threedots = true) {
+
+        $words = array();
+        $temp = explode(" ", strip_tags($text));
+
+        foreach ($temp as $t => $tmp) {
+            $tmp = trim($tmp);
+            if (!$tmp)
+                continue;
+            $words[] = $tmp;
+            if (count($words) >= $count)
+                break;
+        }
+
+        $preview = trim(implode(" ", $words));
+
         if (mb_strlen($preview) < mb_strlen(trim(strip_tags($text))) && $threedots)
             $preview .= "...";
         return $preview;
