@@ -285,6 +285,7 @@ $alltags = $temp;
                             </section><!--
                          --><section class="family-form-part">
                                 <label>Укажите ваши интересны:</label>
+                                <div class="inters-cont"></div>
                                 <div class="inters">
                                     <select class="inters-select">
                                         <option selected value="0">Укажите интересы</option>
