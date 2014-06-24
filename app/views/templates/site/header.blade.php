@@ -5,7 +5,7 @@
             </h1>
 
 {{-- Helper::d($_SERVER['REQUEST_URI']) --}}
-<?
+<?php
 ### LOGIN / LOGOUT ###
 $link_text = "Войти";
 $link_id = "login";
