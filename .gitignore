@@ -6,7 +6,7 @@ composer.lock
 .DS_Store
 
 .htaccess
-upk.clpprj
+*.clpprj
 Thumbs.db
 app/config/database.php
 public/uploads/*

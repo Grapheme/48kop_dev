@@ -91,7 +91,7 @@ class Helper {
         $temp = explode(" ", strip_tags($text));
 
         foreach ($temp as $t => $tmp) {
-            $tmp = trim($tmp);
+            $tmp = trim($tmp, ".,?!-+/");
             if (!$tmp)
                 continue;
             $words[] = $tmp;
@@ -103,6 +103,7 @@ class Helper {
 
         if (mb_strlen($preview) < mb_strlen(trim(strip_tags($text))) && $threedots)
             $preview .= "...";
+
         return $preview;
     }
 
