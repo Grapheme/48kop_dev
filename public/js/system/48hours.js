@@ -39,6 +39,15 @@ $(document).ready(function($){
 
 });
 
+
+	$(document).on('click', '#logout', function(e){
+		e.preventDefault();
+        setCookie("user_social_info", null);
+        $(this).text("Войти");
+        $(this).attr("id", "login");
+	});
+
+
 function uloginauth(token) {
     if(typeof ulogintoken == "undefined")
         setCookie("ulogintoken", token, "Mon, 01-Jan-2018 00:00:00 GMT", "/");
@@ -49,13 +58,17 @@ function uloginauth(token) {
         console.log(data);
         if(!data.error){
             //alert("Привет, "+data.first_name+" "+data.last_name+"!");
-            $("select[name=city]").val(data.city);
-            $(".welcome_msg").html("Добро пожаловать, "+data.first_name+"!");
+            //alert("Добро пожаловать, "+data.first_name+"!");
+            //$(".welcome_msg").html("Добро пожаловать, "+data.first_name+"!");
 
+            $("select.city-select").val(data.city);
+            
             $(".popup.auth").addClass("hidden");
             $(".overlay").addClass("hidden");
 
-            //alert("Добро пожаловать, "+data.first_name+"!");
+            $("#login").text("Выйти");
+            $("#login").attr("id", "logout");
+
         } else {
             // Token expired
         }

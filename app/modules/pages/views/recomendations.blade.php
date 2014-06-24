@@ -114,8 +114,8 @@ $alltags_count = count($alltags);
 $usi = @$_COOKIE["user_social_info"];
 $usi = @json_decode($usi, 1);
 
-#Helper::dd($usi);
-#Helper::dd($user_data);
+#Helper::d($usi);
+#Helper::d($user_data);
 
 
 $profile_id = false;
@@ -125,7 +125,7 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
 
     $array = array(
         'profile'     => $usi['profile'],
-        'city'        => Input::get('city'),
+        'city'        => $user_data['city'],
         'preferences' => json_encode($user_data),
         'social_info' => json_encode($usi),
     );
@@ -134,13 +134,11 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
 
     #Helper::d($info); echo "<hr/>";
     #Helper::d($array);
+    #die;
 
     if (@is_object($info)) {
         $profile_id = $info->id;
-        #$info->city = $user_data['city'];
         $info->update($array);
-        #$info->save();
-        #Helper::d($info);
     } else {
         $info = UserSocialInfo::create($array);
     }

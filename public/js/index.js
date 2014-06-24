@@ -41,14 +41,19 @@ var FamilyForm = (function(){
 		$(this).parent().find('.person').fadeOut(100);
 	});
 
+	var step = 0;
 	$(document).on('click', '.cal-left', function(){
-		$('.calendar-in').removeClass('step');
+		if(step == 0) return;
+		step--;
+		$('.calendar-in').attr('style', '-webkit-transform: translateX(-' + step * 384 + 'px); transform: translateX(' + step * 384 + 'px);');
 		$('.one-month[data-month=07]').removeClass('active');
 		$('.one-month[data-month=06]').addClass('active');
 	});
 
 	$(document).on('click', '.cal-right', function(){
-		$('.calendar-in').addClass('step');
+		if(step == $('.one-month').length - 1) return;
+		step++;
+		$('.calendar-in').attr('style', '-webkit-transform: translateX(-' + step * 384 + 'px); transform: translateX(' + step * 384 + 'px);');
 		$('.one-month[data-month=07]').addClass('active');
 		$('.one-month[data-month=06]').removeClass('active');
 	});
@@ -61,12 +66,18 @@ var FamilyForm = (function(){
 		if($(this).val() == '0') {
 			return;
 		}
+		if($('.inters-clicked').length >= 5) {
+			return;
+		}
 		$('.form-error[data-block=inters]').removeClass('showed');
-		var text = $('.inters-select option[value=' + $(this).val() + ']').text();
+		var text = $('.inters-select option[value="' + $(this).val() + '"]').text();
 		$('.inters-cont').append('<div class="inters-clicked" data-value="' + $(this).val() + '">' + text + '<span class="int-cross">&#10005;</span></div>');
-		$(this).find('option[value=' + $(this).val() + ']').remove();
+		$(this).find('option[value="' + $(this).val() + '"]').remove();
 		selectBox.destroy();
 		selectBox.init();
+		if($('.inters-clicked').length == 5) {
+			$('a.inters-select').hide();
+		}
 	});
 
 	$(document).on('click', '.int-cross', function(){
@@ -77,6 +88,7 @@ var FamilyForm = (function(){
 		var pre_text = $(this).parent().remove();
 		selectBox.destroy();
 		selectBox.init();
+		$('a.inters-select').show();
 	});
 
 	$(document).on('click', '.day.click-allow', function(){
@@ -130,6 +142,11 @@ var FamilyForm = (function(){
 			$('.form-error[data-block=inters]').removeClass('showed');
 		}
 		if(!father && !mother) {
+			if(children[0] == 0) {
+				$('.form-error[data-block=family] span').text('Вы не указали состав семьи');
+			} else {
+				$('.form-error[data-block=family] span').text('Добавьте хотя бы одного взрослого');
+			}
 			$('.form-error[data-block=family]').addClass('showed');
 			form_val = false;
 		} else {

@@ -68,8 +68,13 @@ class Admin48hoursActionsController extends BaseController {
 		#$input = Input::all();
         $input = array(
             'name' => Input::get('name'),
-            'time' => Input::get('time'),
             'desc' => Input::get('desc'),
+            'time' => Input::get('time'),
+
+            'where' => Input::get('where'),
+            'price' => Input::get('price'),
+            'web' => Input::get('web'),
+            'product_id' => Input::get('product'),
         );
         $input['date_time'] = date("Y-m-d", strtotime(Input::get('date_time')));
 
@@ -133,8 +138,13 @@ class Admin48hoursActionsController extends BaseController {
 		#$input = Input::all();
         $input = array(
             'name' => Input::get('name'),
-            'time' => Input::get('time'),
             'desc' => Input::get('desc'),
+            'time' => Input::get('time'),
+
+            'where' => Input::get('where'),
+            'price' => Input::get('price'),
+            'web' => Input::get('web'),
+            'product_id' => Input::get('product'),
         );
         $input['date_time'] = date("Y-m-d", strtotime(Input::get('date_time')));
 
@@ -173,7 +183,7 @@ class Admin48hoursActionsController extends BaseController {
                 ################################################
             }
 
-			$json_request['responseText'] = 'Мероприятие обновлено.';
+			$json_request['responseText'] = 'Мероприятие обновлено';
 			#$json_request['redirect'] = link::auth( $this->module['rest'] );
 			$json_request['status'] = TRUE;
 		} else {

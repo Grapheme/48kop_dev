@@ -26,7 +26,7 @@ class Helper {
 	}
     
     public static function d($array) {
-        echo "<pre>" . print_r($array, 1) . "</pre>";
+        echo "<pre style='text-align:left'>" . print_r($array, 1) . "</pre>";
     }
 
     public static function dd($array) {

@@ -26,7 +26,7 @@
                         <img src="{{ $image }}" title="{{ $product->title }}">
                         @endif
                         <h2>{{ $product->title }}</h2>
-                        <div class='product-desc'>{{ $product->short }}</div>
+                        <div class='product-desc'>{{ str_replace("\n", "<br/>\n", $product->short) }}</div>
                     </div>
                     @endforeach
                 </div>
