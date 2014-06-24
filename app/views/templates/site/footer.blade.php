@@ -7,7 +7,7 @@
                 </div>
                 --}}
                 <div>
-                    <a class="politics" href="#">Политика конфиденциальности</a>
+                    <a class="politics" href="http://www.nestle.ru/info/" target="_blank">Политика конфиденциальности</a>
                 </div>
                 <ul class="social">
                     <li class="social-li">
