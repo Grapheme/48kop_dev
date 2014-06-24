@@ -62,6 +62,7 @@ function uloginauth(token) {
             //$(".welcome_msg").html("Добро пожаловать, "+data.first_name+"!");
 
             $("select.city-select").val(data.city);
+            city_select.setValue(data.city);
             
             $(".popup.auth").addClass("hidden");
             $(".overlay").addClass("hidden");

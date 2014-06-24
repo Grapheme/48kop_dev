@@ -1,7 +1,7 @@
+var city_select = new SelectBox($('.city-select'));
 var FamilyForm = (function(){
 
 	var selectBox = new SelectBox($('.inters-select'));
-	$('.city-select').selectBox();
 
 	$(document).on('focus', '.age input', function(){
 		$(this).parent().addClass('active');
