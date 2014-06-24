@@ -802,7 +802,7 @@ a:focus {
   height: 2.5rem;
   line-height: 2.5rem;
 }
-.calendar .days-row .day:last-child {
+.calendar .days-row .click-allow {
   color: #f42c61;
   cursor: pointer;
 }

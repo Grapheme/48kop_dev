@@ -4,6 +4,28 @@ var FamilyForm = (function(){
 
 	var selectBox = new SelectBox($('.inters-select'));
 
+	var date = new Date();
+	var now_day = date.getDate();
+	var now_month = date.getMonth() + 1;
+
+	$('.one-month').each(function(){
+		var div_month = parseInt($(this).attr('data-month'));
+
+		if(div_month < now_month) {
+			$(this).remove();
+		}
+
+		if(div_month == now_month) {
+			$(this).find('.click-allow').each(function(){
+				var that = $(this);
+				if(parseInt(that.attr('data-date')) + 1 < now_day) {
+					that.removeClass('click-allow');
+					console.log(that);
+				}
+			});
+		}
+	});
+
 	$(document).on('focus', '.age input', function(){
 		$(this).parent().addClass('active');
 		$('.family-item.focused').removeClass('focused');
