@@ -13,6 +13,7 @@ class Public48hoursController extends BaseController {
         #echo $prefix;
         #Route::group(array('before' => 'auth', 'prefix' => $prefix), function() use ($class) {
         	Route::post("/ajax/i-will-go", $class."@iWillGo");
+        	Route::post("/ajax/send-to-friend", $class."@sendToFriend");
         #});
     }
 
@@ -58,7 +59,7 @@ class Public48hoursController extends BaseController {
             ->count();
 
 		$json_request = array('status'=>0, 'responseText'=>'', 'count' => 0, 'also_go' => 0);
-		$json_request['count'] = (int)$count;
+		$json_request['total'] = (int)$count;
 		$json_request['also_go'] = (int)$also_go;
 		$json_request['status'] = 1;
 		return Response::json($json_request, 200);
@@ -73,23 +74,53 @@ class Public48hoursController extends BaseController {
         $object_type = Input::get('object_type');
         $object_id   = Input::get('object_id');
 
-        /*
+        #/*
         $obj = false;
         switch ($object_type) {
             case 'place':
-                $obj = new Place;
+
+                $obj = Place::where('id', $object_id)->first()->toArray();
+                #Helper::d($obj);
+                Mail::send('emails.send_to_friend_place', $obj, function($message) use ($email) {
+                    $message->from(Config::get('mail.sender'));
+                    $message->subject('Привет!');
+                    $message->to($email);
+                });
+
                 break;
+
             case 'action':
-                $obj = new _48hoursAction;
+
+                $obj = _48hoursAction::where('id', $object_id)->first()->toArray();
+                #Helper::d($obj);
+                Mail::send('emails.send_to_friend_action', $obj, function($message) use ($email) {
+                    $message->from(Config::get('mail.sender'));
+                    $message->subject('Привет!');
+                    $message->to($email);
+                });
+
+                break;
+
+            case 'advice':
+
+                $obj = Advice::where('id', $object_id)->first()->toArray();
+                #Helper::d($obj);
+                Mail::send('emails.send_to_friend_advice', $obj, function($message) use ($email) {
+                    $message->from(Config::get('mail.sender'));
+                    $message->subject('Привет!');
+                    $message->to($email);
+                });
+
                 break;
         }
 
         if ( !is_null($obj) ) {
             
         }
-        */
+        #*/
         
 		$json_request['responseText'] = "Сообщение успешно отправлено";
+		#$json_request['responseText'] = "$email / $object_type / $object_id";
 		$json_request['status'] = 1;
 		return Response::json($json_request, 200);
 	}

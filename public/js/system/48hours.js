@@ -10,7 +10,14 @@ $(document).ready(function($){
     }
 
     $(document).ready(function(){
-    	$(".i-will-go").click(function() {
+
+    	/* i will go btn */
+    	//$(".i-will").click(function() {
+    	$(document).on('click', '.i-will', function(e){
+
+    		$(this).toggleClass('active');
+
+            var button = $(this);
 
             $.ajax({
                 url: "/ajax/i-will-go",
@@ -18,17 +25,22 @@ $(document).ready(function($){
                 dataType: 'json',
                 data: {
                     profile_id:  profile_id, 
-                    object_type: $(this).data('type'), 
-                    object_id:   $(this).data('id'), 
+                    object_type: 'action', 
+                    object_id:   $(this).data('action-id'), 
                 },
             }).done(function(data){
                 //data = $.parseJSON(data.toString());
                 console.log(data);
 
+                $(button).parents().find('.people-count').removeClass('hidden');
+                $(button).parents().find('.people-count strong').html(+data.total);
+
+                /*
                 if (data.also_go == 1)
                     alert("Вы уже сказали, что пойдете. Всего пойдет людей: " + (data.count-1));
                 else 
                     alert("Отлично! Вместе с вами пойдет людей: " + (data.count-1));
+                */
 
             }).fail(function(data){
                 console.log(data);
@@ -38,6 +50,15 @@ $(document).ready(function($){
     });
 
 });
+
+
+	$(document).on('click', '#logout', function(e){
+		e.preventDefault();
+        setCookie("user_social_info", null);
+        $(this).text("Войти");
+        $(this).attr("id", "login");
+	});
+
 
 function uloginauth(token) {
     if(typeof ulogintoken == "undefined")
@@ -49,13 +70,18 @@ function uloginauth(token) {
         console.log(data);
         if(!data.error){
             //alert("Привет, "+data.first_name+" "+data.last_name+"!");
-            $("select[name=city]").val(data.city);
-            $(".welcome_msg").html("Добро пожаловать, "+data.first_name+"!");
+            //alert("Добро пожаловать, "+data.first_name+"!");
+            //$(".welcome_msg").html("Добро пожаловать, "+data.first_name+"!");
 
+            $("select.city-select").val(data.city);
+            city_select.setValue(data.city);
+            
             $(".popup.auth").addClass("hidden");
             $(".overlay").addClass("hidden");
 
-            //alert("Добро пожаловать, "+data.first_name+"!");
+            $("#login").text("Выйти");
+            $("#login").attr("id", "logout");
+
         } else {
             // Token expired
         }

@@ -24,4 +24,10 @@ class _48hoursAction extends BaseModel {
 
         return Photo::where('id', $this->photo)->first();
 	}
+
+	public function also_go_count() {
+
+        return iWillGo::where('object_type', 'action')->where('object_id', $this->id)->count();
+	}
+
 }

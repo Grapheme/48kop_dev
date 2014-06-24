@@ -1,7 +1,30 @@
+var city_select = new SelectBox($('.city-select'));
+
 var FamilyForm = (function(){
 
 	var selectBox = new SelectBox($('.inters-select'));
-	$('.city-select').selectBox();
+
+	var date = new Date();
+	var now_day = date.getDate();
+	var now_month = date.getMonth() + 1;
+
+	$('.one-month').each(function(){
+		var div_month = parseInt($(this).attr('data-month'));
+
+		if(div_month < now_month) {
+			$(this).remove();
+		}
+
+		if(div_month == now_month) {
+			$(this).find('.click-allow').each(function(){
+				var that = $(this);
+				if(parseInt(that.attr('data-date')) + 1 < now_day) {
+					that.removeClass('click-allow');
+					console.log(that);
+				}
+			});
+		}
+	});
 
 	$(document).on('focus', '.age input', function(){
 		$(this).parent().addClass('active');
@@ -34,21 +57,26 @@ var FamilyForm = (function(){
 		}
 	});
 
-	$(document).on('mouseover', '.pers-img', function(){
+	/*$(document).on('mouseover', '.pers-img', function(){
 		$(this).parent().find('.person').fadeIn(100);
 	});
 	$(document).on('mouseleave', '.pers-img', function(){
 		$(this).parent().find('.person').fadeOut(100);
 	});
-
+*/
+	var step = 0;
 	$(document).on('click', '.cal-left', function(){
-		$('.calendar-in').removeClass('step');
+		if(step == 0) return;
+		step--;
+		$('.calendar-in').attr('style', '-webkit-transform: translateX(-' + step * 384 + 'px); transform: translateX(' + step * 384 + 'px);');
 		$('.one-month[data-month=07]').removeClass('active');
 		$('.one-month[data-month=06]').addClass('active');
 	});
 
 	$(document).on('click', '.cal-right', function(){
-		$('.calendar-in').addClass('step');
+		if(step == $('.one-month').length - 1) return;
+		step++;
+		$('.calendar-in').attr('style', '-webkit-transform: translateX(-' + step * 384 + 'px); transform: translateX(' + step * 384 + 'px);');
 		$('.one-month[data-month=07]').addClass('active');
 		$('.one-month[data-month=06]').removeClass('active');
 	});
@@ -61,12 +89,18 @@ var FamilyForm = (function(){
 		if($(this).val() == '0') {
 			return;
 		}
+		if($('.inters-clicked').length >= 5) {
+			return;
+		}
 		$('.form-error[data-block=inters]').removeClass('showed');
-		var text = $('.inters-select option[value=' + $(this).val() + ']').text();
+		var text = $('.inters-select option[value="' + $(this).val() + '"]').text();
 		$('.inters-cont').append('<div class="inters-clicked" data-value="' + $(this).val() + '">' + text + '<span class="int-cross">&#10005;</span></div>');
-		$(this).find('option[value=' + $(this).val() + ']').remove();
+		$(this).find('option[value="' + $(this).val() + '"]').remove();
 		selectBox.destroy();
 		selectBox.init();
+		if($('.inters-clicked').length == 5) {
+			$('a.inters-select').hide();
+		}
 	});
 
 	$(document).on('click', '.int-cross', function(){
@@ -77,12 +111,27 @@ var FamilyForm = (function(){
 		var pre_text = $(this).parent().remove();
 		selectBox.destroy();
 		selectBox.init();
+		$('a.inters-select').show();
 	});
 
-	$(document).on('click', '.day.click-allow', function(){
+	$(document).on('click', function(){
+		$('.calendar').addClass('closed');
+	});
+
+	$(document).on('click', '.day.click-allow', function(e){
 		$('input[name=date]').val($(this).text() + ' ' + $(this).parent().parent().attr('data-month-cyr'));
 		$('.calendar').addClass('closed').attr('data-date', $(this).attr('data-date') + '.' + $(this).parent().parent().attr('data-month') + '.2014');
 		$('.form-error[data-block=calendar]').removeClass('showed');
+		return false;
+	});
+
+	$(document).on('click', '.calendar', function(e){
+		e.stopPropagation(); // This is the preferred method.
+    	return false;
+	});
+	$(document).on('click', 'input[name=date]', function(e){
+		e.stopPropagation(); // This is the preferred method.
+    	return false;
 	});
 
 	$(document).on('click', '.family-btn', function(){
@@ -102,19 +151,23 @@ var FamilyForm = (function(){
 			mother = 1;
 		}
 
+		var boy = [];
+		var girl = [];
 		var i = 0;
 		if($('.family-after .family-item[data-person=boy]').length != 0 || $('.family-after .family-item[data-person=girl]').length != 0) {
 			$('.family-after .family-item[data-person=boy]').each(function(){
 				children[i] = $(this).attr('data-age');
+				boy.push($(this).attr('data-age'));
 				i++;
 			});
 			$('.family-after .family-item[data-person=girl]').each(function(){
 				children[i] = $(this).attr('data-age');
+				girl.push($(this).attr('data-age'));
 				i++;
 			});
 		}
 
-		var family = '{"father": ' + father + ', "mother": ' + mother + ', "children": [' + children + ']}';
+		var family = '{"father": ' + father + ', "mother": ' + mother + ', "children": [' + children + '], "boy": [' + boy + '], "girl": [' + girl + ']}';
 		var json_str = '{"date": "' + $('.calendar').attr('data-date') + '", "interests": [' + interests + '], "family": ' + family + ', "city": "' + $('.city-select').val() + '"}';
 		var form_val = true;
 		if(!$('.calendar').attr('data-date')) {
@@ -130,6 +183,11 @@ var FamilyForm = (function(){
 			$('.form-error[data-block=inters]').removeClass('showed');
 		}
 		if(!father && !mother) {
+			if(children[0] == 0) {
+				$('.form-error[data-block=family] span').text('Вы не указали состав семьи');
+			} else {
+				$('.form-error[data-block=family] span').text('Добавьте хотя бы одного взрослого');
+			}
 			$('.form-error[data-block=family]').addClass('showed');
 			form_val = false;
 		} else {
@@ -142,6 +200,14 @@ var FamilyForm = (function(){
 		return false;
 	});
 
+	function inters(array) {
+		array.forEach(function(inter){
+			$('.inters-cont').append('<div class="inters-clicked" data-value="' + inter + '">' + inter + '<span class="int-cross">&#10005;</span></div>');
+		});
+	}
+
+	return {inters: inters};
+
 })();
 
 var Family = (function(){
@@ -150,19 +216,55 @@ var Family = (function(){
 
 	str['father'] = '<a href="#" class="family-item active focused" data-person="father"><span class="pers-img"></span></a>';
 	str['mother'] = '<a href="#" class="family-item active focused" data-person="mother"><span class="pers-img"></span></a>';
-	str['boy'] = '<a href="#" class="family-item active focused" data-person="boy" data-age="0"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text"><label class="fill-age">Укажите возраст сына</label></span></a>';
-	str['girl'] = '<a href="#" class="family-item active focused" data-person="girl" data-age="0"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text"><label class="fill-age">Укажите возраст дочери</label></span></a>';
+	str['boy'] = '<a href="#" class="family-item active focused" data-person="boy" data-age="0"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text"><label class="fill-age">Укажите возраст</label></span></a>';
+	str['girl'] = '<a href="#" class="family-item active focused" data-person="girl" data-age="0"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text"><label class="fill-age">Укажите возраст</label></span></a>';
+
+	function addType(type) {
+		$('.family-after').append(str[type]);
+	}
+
+	function addBoy(age) {
+		var str = '<a href="#" class="family-item active focused" data-person="boy" data-age="' + age + '"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text" value="' + age + '"><label class="fill-age">Укажите возраст</label></span></a>'
+		$('.family-after').append(str);
+	}
+
+	function addGirl(age) {
+		var str = '<a href="#" class="family-item active focused" data-person="girl" data-age="' + age + '"><span class="pers-img"></span><span class="age"><input name="age" maxlength="2" type="text" value="' + age + '"><label class="fill-age">Укажите возраст</label></span></a>';
+		$('.family-after').append(str);
+	}
+
+	function hmuch(type) {
+		return type?$('.family-after .family-item[data-person=' + type + ']').length:$('.family-after .family-item').length;
+	}
+	function gblock(type) {
+		return $('.family-after .family-item[data-person=' + type + ']');
+	}
+
+	function addPerson(type) {
+		if(type == 'father') {
+			if(hmuch('mother') != 0) { gblock('mother').before(str[type]); } else if(hmuch('boy') != 0) { gblock('boy').first().before(str[type]); } else if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
+				$('.family-after').append(str[type]);
+			}
+
+		} else if(type == 'mother') {
+			if(hmuch('boy') != 0) { gblock('boy').first().before(str[type]); } else if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
+				$('.family-after').append(str[type]);
+			}
+
+		} else if(type == 'boy') {
+			if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
+				$('.family-after').append(str[type]);
+			}
+			
+		} else {
+			$('.family-after').append(str[type]);
+		}
+	}
 
 	var item = {
 
 		add: function(that) {
 
-			function hmuch(type) {
-				return type?$('.family-after .family-item[data-person=' + type + ']').length:$('.family-after .family-item').length;
-			}
-			function gblock(type) {
-				return $('.family-after .family-item[data-person=' + type + ']');
-			}
 			var type = that.data('person');
 			var allow = true;
 
@@ -191,24 +293,7 @@ var Family = (function(){
 			$('.family-arrow').addClass('active');
 			$('.family-item.focused').removeClass('focused');
 
-			if(type == 'father') {
-				if(hmuch('mother') != 0) { gblock('mother').before(str[type]); } else if(hmuch('boy') != 0) { gblock('boy').first().before(str[type]); } else if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
-					$('.family-after').append(str[type]);
-				}
-
-			} else if(type == 'mother') {
-				if(hmuch('boy') != 0) { gblock('boy').first().before(str[type]); } else if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
-					$('.family-after').append(str[type]);
-				}
-
-			} else if(type == 'boy') {
-				if(hmuch('girl') != 0) { gblock('girl').first().before(str[type]); } else {
-					$('.family-after').append(str[type]);
-				}
-				
-			} else {
-				$('.family-after').append(str[type]);
-			}
+			addPerson(type);
 
 			if(type == 'boy' || type == 'girl') {
 				$('.fill-age').hide();
@@ -232,4 +317,39 @@ var Family = (function(){
 		item.rm($(this).parent());
 		return false;
 	});
+
+	var fill = function(fill_json) {
+		var json = JSON.parse(fill_json);
+
+		if(json.father == 0 && json.mother == 0) {
+			return;
+		}
+
+		$('.family-arrow').addClass('active');
+
+		if(json.father != 0) {
+			addType('father');
+		}
+
+		if(json.mother != 0) {
+			addType('mother');
+		}
+
+		if(json.boy.length !== 0) {
+			json.boy.forEach(function(age) {
+			   addBoy(age);
+			});
+		}
+
+		if(json.girl.length !== 0) {
+			json.girl.forEach(function(age) {
+			   addGirl(age);
+			});
+		}
+
+		$('.fill-age').hide();
+	}
+
+	return { fill: fill };
 })();
+

@@ -4,6 +4,7 @@ var App = (function(){
 	var $sendEmailCont = $sendEmailForm.html();
 	var $winOffset = $('html').offset().top;
 
+    /*
 	$(document).on('click', '.feedback-form button', function(e){
 		e.preventDefault();
 		$(this).parent()
@@ -15,6 +16,7 @@ var App = (function(){
 			   .prev()
 			   .css('padding', '10% 0 1%');
 	});
+    */
 	$(document).on('click', '.to-bot .button', function(e){
 		$('html,body').animate({
 			scrollTop: $(".mid-cont").offset().top
@@ -54,11 +56,14 @@ var App = (function(){
 		}, 400);
 	});
 
+<<<<<<< HEAD
 	/* i will go btn */
 
 	$(document).on('click', '.i-will', function(e){
 		$(this).toggleClass('active');
 	});
+=======
+>>>>>>> FETCH_HEAD
 
 	/* popups */
 	function alignPopup(popup) {
@@ -142,6 +147,11 @@ var App = (function(){
 		e.preventDefault();
 		$('.overlay').removeClass('hidden');
 		$('[data-item="feedback"]').removeClass('hidden');
+
+        $(".popup.feedback .popup-desc.popup-preview").removeClass("hidden");
+        $(".popup.feedback .popup-desc.popup-success").addClass("hidden");
+        $(".feedback-form").show();
+
 		alignPopup($('[data-item="feedback"]'));
 	});
 	$(document).on('click', '.popup-close, .overlay', function(e){
@@ -165,8 +175,44 @@ var App = (function(){
 		}
 	});
 	$(document).on('click', '#sendEmailSubmit', function(e){
+
 		e.preventDefault();
-		$(this).parent().html('<span class="success">Ваша рекомендация успешно<br>отправлена вашему другу</span>');
+        var element = $(this);
+
+        var email = $(element).parent().find('.input-email').val();
+
+        // Validation email
+        if(!validateEmail(email)) {
+            $(element).parents().find('.error-email').removeClass('hidden');
+            return false;
+        }
+        $(element).parents().find('.error-email').addClass('hidden');
+
+        // Data
+        var el = $(this).parents().find('.send-email');
+        var type = $(el).data('type');
+        var id = $(el).data('id');
+
+        $.ajax({
+            url: "/ajax/send-to-friend",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                email:       email,
+                object_type: type,
+                object_id:   id
+            },
+        }).done(function(data){
+
+            console.log(data);
+            //$(button).parents().find('.people-count').removeClass('hidden');
+            //$(button).parents().find('.people-count strong').html(+data.total);
+    		$(element).parent().html('<span class="success">Ваша рекомендация успешно<br>отправлена вашему другу</span>');
+
+        }).fail(function(data){
+            console.log(data);
+        });
+
 	});
 })();
 
@@ -181,10 +227,13 @@ function validateEmail(x) {
 }
 
 $(document).on('submit', '.feedback-form', function(e){
+
 	var name = $(this).find('input[name=name]');
 	var email = $(this).find('input[name=email]');
 	var message = $(this).find('textarea[name=message]');
 	var form_val = true;
+
+    //alert(name + " | " + email + " | " + message);
 
 	if(name.val() == '') {
 		name.parent().addClass('error');
@@ -224,8 +273,11 @@ $(document).on('submit', '.feedback-form', function(e){
             console.log(response);
             if (response.status == true) {
                 //alert("ALL OK!");
-                $(".popup.feedback .popup-desc").html("<br/><p>Ваше сообщение успешно отправлено.</p><p>Спасибо за внимание к нашему проекту.</p><br/><br/>");
+                $(".popup.feedback .popup-desc.popup-preview").addClass("hidden");
+                $(".popup.feedback .popup-desc.popup-success").removeClass("hidden");
+                $(".feedback-form textarea[name=message]").val('');
                 $(".feedback-form").hide();
+                $(btn).show();
             }
             return false;
         },

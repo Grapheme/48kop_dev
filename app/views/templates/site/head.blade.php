@@ -13,3 +13,9 @@
         {{ HTML::style('css/main.css') }}
         {{ HTML::style('css/jquery.selectbox.css') }}
         {{ HTML::script('js/vendor/modernizr-2.6.2.min.js') }}
+<style>
+.error-email {
+    color: #f00;
+    font-size: 14px;
+}
+</style>

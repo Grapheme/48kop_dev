@@ -7,23 +7,26 @@
 
 @section('content')
 <?
+
+#Helper::dd(Input::all());
+
 if (!Input::get('line'))
     Redirect("/");
 ?>
         <main class="recomendations">
             <h2>
                 Персональные рекомендации для вас<br>
-                на выходные 22-23 июня 2014 года
+                на выходные {{ Input::get('date') }} 2014 года
             </h2>
             <ul class="rec-filter">
                 <li class="rec-filter-li">
-                    <a href="#">Места</a>
+                    <a href="#places">Места</a>
                 <li class="rec-filter-li">
-                    <a href="#">Мероприятия</a>
+                    <a href="#actions">Мероприятия</a>
                 <li class="rec-filter-li">
-                    <a href="#">Советы</a>
+                    <a href="#advices">Советы</a>
                 <li class="rec-filter-li">
-                    <a href="#">Где купить</a>
+                    <a href="#wheretobuy">Где купить</a>
             </ul>
 
             <section class="places">
@@ -43,7 +46,7 @@ $limit = array(
 
 $line = json_decode(Input::get('line'), 1);
 
-#Helper::d($line);
+#Helper::dd($line);
 
 /*
 $user_data = array(
@@ -66,7 +69,10 @@ $user_data['tags'] = implode(",", $user_data['tags']);
 
 #$ages = array('0-3', '4-7', '7-10', '10-14', '14+');
 $ages = array();
-foreach($user_data['family']['children'] as $age) {
+$all_childrens = array_merge($user_data['family']['boy'], $user_data['family']['girl']);
+#Helper::dd($all_childrens);
+#foreach($user_data['family']['children'] as $age) {
+foreach($all_childrens as $age) {
     if ($age > 0) {
         if ($age <=3)
             $ages[] = '0-3';
@@ -80,7 +86,9 @@ foreach($user_data['family']['children'] as $age) {
             $ages[] = '14+';
     }
 }
-$user_data['family'] = implode(",", $ages);
+$ages = array_unique($ages);
+#Helper::dd($ages);
+$user_data['family']['ages'] = implode(",", $ages);
 
 
 #Helper::d($user_data);
@@ -90,7 +98,7 @@ $alltags = trim(
     implode(",",
         array(
             $user_data['tags'],
-            $user_data['family'],
+            $user_data['family']['ages'],
             $user_data['taste'],
         )
     )
@@ -114,8 +122,8 @@ $alltags_count = count($alltags);
 $usi = @$_COOKIE["user_social_info"];
 $usi = @json_decode($usi, 1);
 
-#Helper::dd($usi);
-#Helper::dd($user_data);
+#Helper::d($usi);
+#Helper::d($user_data);
 
 
 $profile_id = false;
@@ -125,7 +133,7 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
 
     $array = array(
         'profile'     => $usi['profile'],
-        'city'        => Input::get('city'),
+        'city'        => $user_data['city'],
         'preferences' => json_encode($user_data),
         'social_info' => json_encode($usi),
     );
@@ -133,14 +141,12 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
     $info = UserSocialInfo::where('profile', $usi['profile'])->first();
 
     #Helper::d($info); echo "<hr/>";
-    #Helper::d($array);
+    #Helper::dd($array);
+    #die;
 
     if (@is_object($info)) {
         $profile_id = $info->id;
-        #$info->city = $user_data['city'];
         $info->update($array);
-        #$info->save();
-        #Helper::d($info);
     } else {
         $info = UserSocialInfo::create($array);
     }
@@ -200,6 +206,7 @@ arsort($overlap);
 ?>
     @if (@count($objects))
 
+            <a name="places"></a>
             <h3 id="places_anch">
                 Места
             </h3>
@@ -250,6 +257,12 @@ $js['places'] = array();
 ### МЕРОПРИЯТИЯ
 ####################################################################################
 
+## Для фильтра мероприятий по выбранной дате
+$date_start = strtotime($user_data['date']);
+$date_stop = $date_start + 60*60*24*2;
+
+    #Helper::d($user_data['date'] . " -> " . strtotime($user_data['date']));
+
 $objects = array(); ## Объекты
 $overlap = array(); ## Совпадения тегов и интересов
 ## Ищем все уникальные объекты с тегом переданного города
@@ -264,6 +277,14 @@ foreach ($tags as $tag) {
     ## Если объект не найден (такое может быть) - пропускаем
     if(is_null($action))
         continue;
+
+    #Helper::d($date_start . " < " . $action->date_time . " -> " . strtotime($action->date_time) . " < " . $date_stop);
+
+    ## Фильтруем мероприятия по выбранной дате
+    $date_action = strtotime($action->date_time);
+    if( $date_action < $date_start || $date_action >= $date_stop )
+        continue;
+
     ## Получаем ВСЕ теги объекта
     $action_tags = Tag::where('module', '48hoursActions')
                      ->where('unit_id', $action->id)
@@ -293,6 +314,7 @@ arsort($overlap);
 ?>
     @if (@count($objects))
 
+        <a name="actions"></a>
         <h3 id="events_anch" class="clear-header">
             Мероприятия
         </h3>
@@ -310,9 +332,13 @@ arsort($overlap);
             if (is_object($photo))
                 $photo = $photo->full();
 
+            $product_id = '';
             $product_title = '';
-            if ($action->product_id)
-                $product_title = Product::find($action->product_id)->title;
+            if ($action->product_id) {
+                $product = Product::find($action->product_id);
+                $product_id = $product->category_id . $product->id;
+                $product_title = $product->title;
+            }
 
             $js['events'][$action->id] = array(
                 'id' => $action->id,
@@ -324,8 +350,9 @@ arsort($overlap);
                 'where' => $action->where,
                 'price' => $action->price,
                 'web' => $action->web,
-                'product_id' => $action->product_id,
+                'product_id' => $product_id,
                 'product_title' => $product_title,
+                'total' => $action->also_go_count(),
             ); 
 
 ?>
@@ -334,7 +361,7 @@ arsort($overlap);
                 <div class="events-body">
                     <a href="#" class="events-link" data-place="{{ $action->id }}">{{ $action->name }}</a>
                     <div class="events-desc">
-                        {{ Helper::preview($action->desc, 20) }}
+                        {{ Helper::preview($action->desc, 10) }}
                     </div>
                     @if ($action->date_time && $action->time)
                     <div class="events-date"><span class="icon icon-calendar-1"></span>{{ Helper::rdate("d M", $action->date_time, true) }}, {{ $action->time }}</div>
@@ -396,6 +423,8 @@ arsort($overlap);
     ## Если что-то нашлось - выводим
 ?>
     @if (@count($objects))
+
+        <a name="advices"></a>
         <h3 id="advices_anch" class="clear-header big">
             Советы
         </h3>
@@ -450,6 +479,8 @@ foreach ($tags as $tag) {
     ## Если что-то нашлось - выводим
 ?>
     @if (@count($objects))
+
+        <a name="wheretobuy"></a>
         <h3 id="where2b_anch" class="clear-header big">
             Где купить
         </h3>
@@ -470,6 +501,10 @@ foreach ($tags as $tag) {
         @endforeach
         </ul>
     @endif
+
+    <div class="family-btn-cont">
+        <a href="{{URL::to('/')}}" class="repeat-btn">Попробовать еще раз</a>
+    </div>
 
 <?
 ####################################################################################

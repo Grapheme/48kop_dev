@@ -6,16 +6,21 @@
 
 @section('content')
 
-<?
+<?php
+$user_data = array();
 $preferences = array();
 $usi = @$_COOKIE["user_social_info"];
 $usi = @json_decode($usi, 1);
+
+#Helper::d($usi);
+
 if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
-    $info = UserSocialInfo::where('profile', $usi['profile'])->first();
-    if (is_object($info)) {
-        #Helper::dd($info);
-        $preferences = json_decode($info->preferences, 1); 
+    $user_data = UserSocialInfo::where('profile', $usi['profile'])->first()->toArray();
+    if (count($user_data)) {
+        #Helper::dd($user_data);
+        $preferences = json_decode($user_data['preferences'], 1);
         #Helper::dd($preferences);
+        #Helper::dd($preferences['family']);
     }
 }
 
@@ -32,71 +37,13 @@ foreach ($alltags as $alltag) {
 $alltags = $temp;
 #Helper::dd($alltags);
 
+#$user_data = Config::get('user.user_data');
+#Helper::d($user_data);
 ?>
 
         <main>
             <section class="top">
                 <div class="section-cont">
-
-
-<? if (0) { ?>
-                	{{ Form::open(array('url'=>'recomendations', 'role'=>'form', 'class'=>'get-recomendations-form family-form', 'id'=>'get-recomendations-form')) }}
-                
-                    <section class="col col-12">
-                        <div class="well">
-                            <header>
-                                <h3>Получить рекомендации:</h3>
-                                <div class="welcome_msg"></div>
-                            </header>
-                            <fieldset>
-                
-                                <section>
-                                    <label class="label">Город:</label><br/>
-                                    <label class="input">
-                                        {{ Form::select('city', array('Ростов-на-Дону'=>'Ростов-на-Дону', 'Москва'=>'Москва'), @$info->city, array('class'=>'template-change', 'autocomplete'=>'off')) }} <i></i>
-                                    </label>
-                                </section>
-                
-                                <section>
-                                    <label class="label">Интересы (теги, через запятую):</label><br/>
-                                    <label class="input">
-                                        {{ Form::textarea('tags', @$preferences['tags'], array('class'=>'redactor redactor_150')) }}
-                                    </label>
-                                </section>
-                
-                                <hr/>
-                
-                                <section>
-                                    <label class="label">Состав семьи (теги, через запятую):</label><br/>
-                                    <label class="input">
-                                        {{ Form::textarea('family', @$preferences['family'], array('class'=>'redactor redactor_150')) }}
-                                    </label>
-                                </section>
-                
-                                <section>
-                                    <label class="label">Вкус мороженного:</label><br/>
-                                    <label class="input">
-                                        {{ Form::select('taste', array('Клубничное'=>'Клубничное', 'Шоколадное'=>'Шоколадное'), @$preferences['taste'], array('class'=>'template-change', 'autocomplete'=>'off')) }} <i></i>
-                                    </label>
-                                </section>
-                
-                                <section>
-                                    <label class="label">Дата:</label><br/>
-                                    <label class="input">
-                                        {{ Form::select('date', array('2014.06.21-2014.06.22'=>'21-22 июня', '2014.07.05-2014.07.06'=>'5-6 июля'), @$preferences['date'], array('class'=>'template-change', 'autocomplete'=>'off')) }} <i></i>
-                                    </label>
-                                </section>
-                
-                            </fieldset>
-                            <footer>
-                        	    <button type="submit">Получить!</button>
-                            </footer>
-                        </div>
-                    </section>
-                    
-                	{{ Form::close() }}
-<? } ?>
-
 
                     <form class="family-form" action="/recomendations" method="POST">
                         <div class="form-head">
@@ -238,18 +185,288 @@ $alltags = $temp;
                                                     <i class="day"></i>
                                                 </div>
                                             </div>
+                                            <div data-month="08" data-month-cyr="августа" class="one-month">
+                                                <div class="month">
+                                                    Август 2014
+                                                </div>
+                                                <div class="weekdays">
+                                                    <span class="weekday">пн</span>
+                                                    <span class="weekday">вт</span>
+                                                    <span class="weekday">ср</span>
+                                                    <span class="weekday">чт</span>
+                                                    <span class="weekday">пт</span>
+                                                    <span class="weekday weekend">сб-вс</span>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day">1</i>
+                                                    <i class="day click-allow" data-date="2">2-3</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">4</i>
+                                                    <i class="day">5</i>
+                                                    <i class="day">6</i>
+                                                    <i class="day">7</i>
+                                                    <i class="day">8</i>
+                                                    <i class="day click-allow" data-date="9">9-10</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">11</i>
+                                                    <i class="day">12</i>
+                                                    <i class="day">13</i>
+                                                    <i class="day">14</i>
+                                                    <i class="day">15</i>
+                                                    <i class="day click-allow" data-date="16">16-17</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">18</i>
+                                                    <i class="day">19</i>
+                                                    <i class="day">20</i>
+                                                    <i class="day">21</i>
+                                                    <i class="day">22</i>
+                                                    <i class="day click-allow" data-date="23">23-24</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">25</i>
+                                                    <i class="day">26</i>
+                                                    <i class="day">27</i>
+                                                    <i class="day">28</i>
+                                                    <i class="day">29</i>
+                                                    <i class="day click-allow" data-date="30">30-31</i>
+                                                </div>
+                                            </div>
+                                            <div data-month="09" data-month-cyr="сентября" class="one-month">
+                                                <div class="month">
+                                                    Сентябрь 2014
+                                                </div>
+                                                <div class="weekdays">
+                                                    <span class="weekday">пн</span>
+                                                    <span class="weekday">вт</span>
+                                                    <span class="weekday">ср</span>
+                                                    <span class="weekday">чт</span>
+                                                    <span class="weekday">пт</span>
+                                                    <span class="weekday weekend">сб-вс</span>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">1</i>
+                                                    <i class="day">2</i>
+                                                    <i class="day">3</i>
+                                                    <i class="day">4</i>
+                                                    <i class="day">5</i>
+                                                    <i class="day click-allow" data-date="6">6-7</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">8</i>
+                                                    <i class="day">9</i>
+                                                    <i class="day">10</i>
+                                                    <i class="day">11</i>
+                                                    <i class="day">12</i>
+                                                    <i class="day click-allow" data-date="13">13-14</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">15</i>
+                                                    <i class="day">16</i>
+                                                    <i class="day">17</i>
+                                                    <i class="day">18</i>
+                                                    <i class="day">19</i>
+                                                    <i class="day click-allow" data-date="20">20-21</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">22</i>
+                                                    <i class="day">23</i>
+                                                    <i class="day">24</i>
+                                                    <i class="day">25</i>
+                                                    <i class="day">26</i>
+                                                    <i class="day click-allow" data-date="27">27-28</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">29</i>
+                                                    <i class="day">20</i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                </div>
+                                            </div>
+                                            <div data-month="10" data-month-cyr="октября" class="one-month">
+                                                <div class="month">
+                                                    Октябрь 2014
+                                                </div>
+                                                <div class="weekdays">
+                                                    <span class="weekday">пн</span>
+                                                    <span class="weekday">вт</span>
+                                                    <span class="weekday">ср</span>
+                                                    <span class="weekday">чт</span>
+                                                    <span class="weekday">пт</span>
+                                                    <span class="weekday weekend">сб-вс</span>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day">1</i>
+                                                    <i class="day">2</i>
+                                                    <i class="day">3</i>
+                                                    <i class="day click-allow" data-date="4">4-5</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">6</i>
+                                                    <i class="day">7</i>
+                                                    <i class="day">8</i>
+                                                    <i class="day">9</i>
+                                                    <i class="day">10</i>
+                                                    <i class="day click-allow" data-date="11">11-12</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">13</i>
+                                                    <i class="day">14</i>
+                                                    <i class="day">15</i>
+                                                    <i class="day">16</i>
+                                                    <i class="day">17</i>
+                                                    <i class="day click-allow" data-date="18">18-19</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">20</i>
+                                                    <i class="day">21</i>
+                                                    <i class="day">22</i>
+                                                    <i class="day">23</i>
+                                                    <i class="day">24</i>
+                                                    <i class="day click-allow" data-date="25">25-26</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">27</i>
+                                                    <i class="day">28</i>
+                                                    <i class="day">29</i>
+                                                    <i class="day">30</i>
+                                                    <i class="day">31</i>
+                                                    <i class="day"></i>
+                                                </div>
+                                            </div>
+                                            <div data-month="11" data-month-cyr="ноября" class="one-month">
+                                                <div class="month">
+                                                    Ноябрь 2014
+                                                </div>
+                                                <div class="weekdays">
+                                                    <span class="weekday">пн</span>
+                                                    <span class="weekday">вт</span>
+                                                    <span class="weekday">ср</span>
+                                                    <span class="weekday">чт</span>
+                                                    <span class="weekday">пт</span>
+                                                    <span class="weekday weekend">сб-вс</span>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day click-allow" data-date="1">1-2</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">3</i>
+                                                    <i class="day">4</i>
+                                                    <i class="day">5</i>
+                                                    <i class="day">6</i>
+                                                    <i class="day">7</i>
+                                                    <i class="day click-allow" data-date="8">8-9</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">13</i>
+                                                    <i class="day">14</i>
+                                                    <i class="day">15</i>
+                                                    <i class="day">16</i>
+                                                    <i class="day">17</i>
+                                                    <i class="day click-allow" data-date="18">18-19</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">10</i>
+                                                    <i class="day">11</i>
+                                                    <i class="day">12</i>
+                                                    <i class="day">13</i>
+                                                    <i class="day">14</i>
+                                                    <i class="day click-allow" data-date="15">15-16</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">17</i>
+                                                    <i class="day">18</i>
+                                                    <i class="day">19</i>
+                                                    <i class="day">20</i>
+                                                    <i class="day">21</i>
+                                                    <i class="day click-allow" data-date="22">22-23</i>
+                                                </div>
+                                                 <div class="days-row">
+                                                    <i class="day">24</i>
+                                                    <i class="day">25</i>
+                                                    <i class="day">26</i>
+                                                    <i class="day">27</i>
+                                                    <i class="day">28</i>
+                                                    <i class="day click-allow" data-date="29">29-30</i>
+                                                </div>
+                                            </div>
+                                            <div data-month="12" data-month-cyr="декабря" class="one-month">
+                                                <div class="month">
+                                                    Декабрь 2014
+                                                </div>
+                                                <div class="weekdays">
+                                                    <span class="weekday">пн</span>
+                                                    <span class="weekday">вт</span>
+                                                    <span class="weekday">ср</span>
+                                                    <span class="weekday">чт</span>
+                                                    <span class="weekday">пт</span>
+                                                    <span class="weekday weekend">сб-вс</span>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">1</i>
+                                                    <i class="day">2</i>
+                                                    <i class="day">3</i>
+                                                    <i class="day">4</i>
+                                                    <i class="day">5</i>
+                                                    <i class="day click-allow" data-date="6">6-7</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">8</i>
+                                                    <i class="day">9</i>
+                                                    <i class="day">10</i>
+                                                    <i class="day">11</i>
+                                                    <i class="day">12</i>
+                                                    <i class="day click-allow" data-date="13">13-14</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">15</i>
+                                                    <i class="day">16</i>
+                                                    <i class="day">17</i>
+                                                    <i class="day">18</i>
+                                                    <i class="day">19</i>
+                                                    <i class="day click-allow" data-date="20">20-21</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">22</i>
+                                                    <i class="day">23</i>
+                                                    <i class="day">24</i>
+                                                    <i class="day">25</i>
+                                                    <i class="day">26</i>
+                                                    <i class="day click-allow" data-date="27">27-28</i>
+                                                </div>
+                                                <div class="days-row">
+                                                    <i class="day">29</i>
+                                                    <i class="day">30</i>
+                                                    <i class="day">31</i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                    <i class="day"></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>                                
                                 <div class="city-part">
                                     <label>Ваш город:</label>
                                     <select class="city-select">
-                                        <option value="Москва" selected>Москва</option>
-                                        <option value="Санкт-Петербург">Санкт-Петербург</option>
-                                        <option value="Воронеж">Воронеж</option>
-                                        <option value="Екатеринбург">Екатеринбург</option>
-                                        <option value="Краснодар">Краснодар</option>
-                                        <option value="Самара">Самара</option>
+                                        @foreach(Config::get('site.cities') as $city)
+                                        <option value="{{ $city }}"<?=(@$user_data['city']==$city?' selected':'')?>>{{ $city }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </section><!--
@@ -341,4 +558,31 @@ $alltags = $temp;
 
 @section('scripts')
     {{ HTML::script("js/index.js") }}
+
+    <script>
+    {{--
+    // TESTING VALUES FOR FAMILY FILL FUNCTION //
+    var family_fill = '{'
+    
+    	+ '"father": 1,'
+    	+ '"mother": 1,'
+    	+ '"girl": [5, 5],'
+    	+ '"boy": [5]'
+    
+    	+ '}';
+    var interests = ['Где купить', 'Места'];
+    --}}
+
+    @if (@$preferences['family'])
+    var family_fill = '<? if(@$preferences['family']) { echo @json_encode($preferences['family']); } ?>';
+    Family.fill(family_fill);
+    @endif
+
+    @if (@$preferences['tags'])
+    var interests = {{ @json_encode(@explode(",", @$preferences['tags'])) }};
+    FamilyForm.inters(interests);
+    @endif
+
+    </script>
+
 @stop
