@@ -331,18 +331,3 @@ var Family = (function(){
 	return { fill: fill };
 })();
 
-// TESTING VALUES FOR FAMILY FILL FUNCTION //
-var family_fill = '{'
-
-	+ '"father": 1,'
-	+ '"mother": 1,'
-	+ '"girl": [5, 5],'
-	+ '"boy": [5]'
-
-	+ '}';
-
-var interests = ['Где купить', 'Места'];
-
-Family.fill(family_fill);
-FamilyForm.inters(interests);
-

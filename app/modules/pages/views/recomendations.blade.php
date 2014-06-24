@@ -7,6 +7,9 @@
 
 @section('content')
 <?
+
+#Helper::dd(Input::all());
+
 if (!Input::get('line'))
     Redirect("/");
 ?>
@@ -43,7 +46,7 @@ $limit = array(
 
 $line = json_decode(Input::get('line'), 1);
 
-#Helper::d($line);
+#Helper::dd($line);
 
 /*
 $user_data = array(
@@ -66,7 +69,10 @@ $user_data['tags'] = implode(",", $user_data['tags']);
 
 #$ages = array('0-3', '4-7', '7-10', '10-14', '14+');
 $ages = array();
-foreach($user_data['family']['children'] as $age) {
+$all_childrens = array_merge($user_data['family']['boy'], $user_data['family']['girl']);
+#Helper::dd($all_childrens);
+#foreach($user_data['family']['children'] as $age) {
+foreach($all_childrens as $age) {
     if ($age > 0) {
         if ($age <=3)
             $ages[] = '0-3';
@@ -80,7 +86,9 @@ foreach($user_data['family']['children'] as $age) {
             $ages[] = '14+';
     }
 }
-$user_data['family'] = implode(",", $ages);
+$ages = array_unique($ages);
+#Helper::dd($ages);
+$user_data['family']['ages'] = implode(",", $ages);
 
 
 #Helper::d($user_data);
@@ -90,7 +98,7 @@ $alltags = trim(
     implode(",",
         array(
             $user_data['tags'],
-            $user_data['family'],
+            $user_data['family']['ages'],
             $user_data['taste'],
         )
     )
@@ -133,7 +141,7 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
     $info = UserSocialInfo::where('profile', $usi['profile'])->first();
 
     #Helper::d($info); echo "<hr/>";
-    #Helper::d($array);
+    #Helper::dd($array);
     #die;
 
     if (@is_object($info)) {

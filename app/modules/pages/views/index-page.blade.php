@@ -18,8 +18,9 @@ if (is_array($usi) && isset($usi['profile']) && $usi['profile'] != '') {
     $user_data = UserSocialInfo::where('profile', $usi['profile'])->first()->toArray();
     if (count($user_data)) {
         #Helper::dd($user_data);
-        $preferences = json_decode($user_data['preferences'], 1); 
+        $preferences = json_decode($user_data['preferences'], 1);
         #Helper::dd($preferences);
+        #Helper::dd($preferences['family']);
     }
 }
 
@@ -35,7 +36,6 @@ foreach ($alltags as $alltag) {
 }
 $alltags = $temp;
 #Helper::dd($alltags);
-
 
 #$user_data = Config::get('user.user_data');
 #Helper::d($user_data);
@@ -558,4 +558,26 @@ $alltags = $temp;
 
 @section('scripts')
     {{ HTML::script("js/index.js") }}
+
+    <script>
+    {{--
+    // TESTING VALUES FOR FAMILY FILL FUNCTION //
+    var family_fill = '{'
+    
+    	+ '"father": 1,'
+    	+ '"mother": 1,'
+    	+ '"girl": [5, 5],'
+    	+ '"boy": [5]'
+    
+    	+ '}';
+    var interests = ['Где купить', 'Места'];
+    --}}
+
+    var family_fill = '{{ @json_encode($preferences['family']) }}';
+    var interests = {{ @json_encode(@explode(",", @$preferences['tags'])) }};
+
+    Family.fill(family_fill);
+    FamilyForm.inters(interests);
+    </script>
+
 @stop
