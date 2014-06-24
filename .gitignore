@@ -1,6 +1,5 @@
 /usersfiles
 /public/uploads
-/vendor
 composer.phar
 composer.lock
 .DS_Store
