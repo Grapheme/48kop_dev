@@ -332,9 +332,13 @@ arsort($overlap);
             if (is_object($photo))
                 $photo = $photo->full();
 
+            $product_id = '';
             $product_title = '';
-            if ($action->product_id)
-                $product_title = Product::find($action->product_id)->title;
+            if ($action->product_id) {
+                $product = Product::find($action->product_id);
+                $product_id = $product->category_id . $product->id;
+                $product_title = $product->title;
+            }
 
             $js['events'][$action->id] = array(
                 'id' => $action->id,
@@ -346,7 +350,7 @@ arsort($overlap);
                 'where' => $action->where,
                 'price' => $action->price,
                 'web' => $action->web,
-                'product_id' => $action->product_id,
+                'product_id' => $product_id,
                 'product_title' => $product_title,
                 'total' => $action->also_go_count(),
             ); 
