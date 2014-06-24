@@ -4,6 +4,7 @@ var App = (function(){
 	var $sendEmailCont = $sendEmailForm.html();
 	var $winOffset = $('html').offset().top;
 
+    /*
 	$(document).on('click', '.feedback-form button', function(e){
 		e.preventDefault();
 		$(this).parent()
@@ -15,6 +16,7 @@ var App = (function(){
 			   .prev()
 			   .css('padding', '10% 0 1%');
 	});
+    */
 	$(document).on('click', '.to-bot .button', function(e){
 		$('html,body').animate({
 			scrollTop: $(".mid-cont").offset().top
@@ -216,6 +218,8 @@ $(document).on('submit', '.feedback-form', function(e){
 	var email = $(this).find('input[name=email]');
 	var message = $(this).find('textarea[name=message]');
 	var form_val = true;
+
+    alert(name + " | " + email + " | " + message);
 
 	if(name.val() == '') {
 		name.parent().addClass('error');
