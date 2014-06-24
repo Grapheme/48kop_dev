@@ -59,8 +59,11 @@
                 <header>
                     <div class="popup-close icon icon-cancel"></div>
                     <h3>Обратная связь</h3>
-                    <div class="popup-desc">
+                    <div class="popup-desc popup-preview">
                         Нам очень важно ваше мнение
+                    </div>
+                    <div class="popup-desc popup-success hidden">
+                        <br/><p>Ваше сообщение успешно отправлено.</p><p>Спасибо за внимание к нашему проекту.</p><br/><br/>
                     </div>
                 </header> 
                 <div class="form-error showed0">

@@ -139,6 +139,11 @@ var App = (function(){
 		e.preventDefault();
 		$('.overlay').removeClass('hidden');
 		$('[data-item="feedback"]').removeClass('hidden');
+
+        $(".popup.feedback .popup-desc.popup-preview").removeClass("hidden");
+        $(".popup.feedback .popup-desc.popup-success").addClass("hidden");
+        $(".feedback-form").show();
+
 		alignPopup($('[data-item="feedback"]'));
 	});
 	$(document).on('click', '.popup-close, .overlay', function(e){
@@ -214,12 +219,13 @@ function validateEmail(x) {
 }
 
 $(document).on('submit', '.feedback-form', function(e){
+
 	var name = $(this).find('input[name=name]');
 	var email = $(this).find('input[name=email]');
 	var message = $(this).find('textarea[name=message]');
 	var form_val = true;
 
-    alert(name + " | " + email + " | " + message);
+    //alert(name + " | " + email + " | " + message);
 
 	if(name.val() == '') {
 		name.parent().addClass('error');
@@ -259,8 +265,11 @@ $(document).on('submit', '.feedback-form', function(e){
             console.log(response);
             if (response.status == true) {
                 //alert("ALL OK!");
-                $(".popup.feedback .popup-desc").html("<br/><p>Ваше сообщение успешно отправлено.</p><p>Спасибо за внимание к нашему проекту.</p><br/><br/>");
+                $(".popup.feedback .popup-desc.popup-preview").addClass("hidden");
+                $(".popup.feedback .popup-desc.popup-success").removeClass("hidden");
+                $(".feedback-form textarea[name=message]").val('');
                 $(".feedback-form").hide();
+                $(btn).show();
             }
             return false;
         },
