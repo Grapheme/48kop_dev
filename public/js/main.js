@@ -54,11 +54,6 @@ var App = (function(){
 		}, 400);
 	});
 
-	/* i will go btn */
-
-	$(document).on('click', '.i-will', function(e){
-		$(this).toggleClass('active');
-	});
 
 	/* popups */
 	function alignPopup(popup) {
@@ -165,8 +160,44 @@ var App = (function(){
 		}
 	});
 	$(document).on('click', '#sendEmailSubmit', function(e){
+
 		e.preventDefault();
-		$(this).parent().html('<span class="success">Ваша рекомендация успешно<br>отправлена вашему другу</span>');
+        var element = $(this);
+
+        var email = $(element).parent().find('.input-email').val();
+
+        // Validation email
+        if(!validateEmail(email)) {
+            $(element).parents().find('.error-email').removeClass('hidden');
+            return false;
+        }
+        $(element).parents().find('.error-email').addClass('hidden');
+
+        // Data
+        var el = $(this).parents().find('.send-email');
+        var type = $(el).data('type');
+        var id = $(el).data('id');
+
+        $.ajax({
+            url: "/ajax/send-to-friend",
+            type: 'post',
+            dataType: 'json',
+            data: {
+                email:       email,
+                object_type: type,
+                object_id:   id
+            },
+        }).done(function(data){
+
+            console.log(data);
+            //$(button).parents().find('.people-count').removeClass('hidden');
+            //$(button).parents().find('.people-count strong').html(+data.total);
+    		$(element).parent().html('<span class="success">Ваша рекомендация успешно<br>отправлена вашему другу</span>');
+
+        }).fail(function(data){
+            console.log(data);
+        });
+
 	});
 })();
 

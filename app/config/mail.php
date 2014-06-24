@@ -3,6 +3,7 @@
 return array(
 
     'for_feedback' => 'email@addre.ss',
+    'sender' => 'friend@48kopeek.ru',
     
 	'driver' => 'smtp',
 	'host' => 'smtp.gmail.com',
@@ -12,5 +13,5 @@ return array(
 	'username' => 'uspensky.pk@gmail.com',
 	'password' => 'hf5msdfl34',
 	'sendmail' => '/usr/sbin/sendmail -bs',
-	'pretend' => true,
+	'pretend' => 1,
 );

@@ -17,13 +17,13 @@ if (!Input::get('line'))
             </h2>
             <ul class="rec-filter">
                 <li class="rec-filter-li">
-                    <a href="#">Места</a>
+                    <a href="#places">Места</a>
                 <li class="rec-filter-li">
-                    <a href="#">Мероприятия</a>
+                    <a href="#actions">Мероприятия</a>
                 <li class="rec-filter-li">
-                    <a href="#">Советы</a>
+                    <a href="#advices">Советы</a>
                 <li class="rec-filter-li">
-                    <a href="#">Где купить</a>
+                    <a href="#wheretobuy">Где купить</a>
             </ul>
 
             <section class="places">
@@ -198,6 +198,7 @@ arsort($overlap);
 ?>
     @if (@count($objects))
 
+            <a name="places"></a>
             <h3 id="places_anch">
                 Места
             </h3>
@@ -248,6 +249,12 @@ $js['places'] = array();
 ### МЕРОПРИЯТИЯ
 ####################################################################################
 
+## Для фильтра мероприятий по выбранной дате
+$date_start = strtotime($user_data['date']);
+$date_stop = $date_start + 60*60*24*2;
+
+    #Helper::d($user_data['date'] . " -> " . strtotime($user_data['date']));
+
 $objects = array(); ## Объекты
 $overlap = array(); ## Совпадения тегов и интересов
 ## Ищем все уникальные объекты с тегом переданного города
@@ -262,6 +269,14 @@ foreach ($tags as $tag) {
     ## Если объект не найден (такое может быть) - пропускаем
     if(is_null($action))
         continue;
+
+    #Helper::d($date_start . " < " . $action->date_time . " -> " . strtotime($action->date_time) . " < " . $date_stop);
+
+    ## Фильтруем мероприятия по выбранной дате
+    $date_action = strtotime($action->date_time);
+    if( $date_action < $date_start || $date_action >= $date_stop )
+        continue;
+
     ## Получаем ВСЕ теги объекта
     $action_tags = Tag::where('module', '48hoursActions')
                      ->where('unit_id', $action->id)
@@ -291,6 +306,7 @@ arsort($overlap);
 ?>
     @if (@count($objects))
 
+        <a name="actions"></a>
         <h3 id="events_anch" class="clear-header">
             Мероприятия
         </h3>
@@ -324,6 +340,7 @@ arsort($overlap);
                 'web' => $action->web,
                 'product_id' => $action->product_id,
                 'product_title' => $product_title,
+                'total' => $action->also_go_count(),
             ); 
 
 ?>
@@ -332,7 +349,7 @@ arsort($overlap);
                 <div class="events-body">
                     <a href="#" class="events-link" data-place="{{ $action->id }}">{{ $action->name }}</a>
                     <div class="events-desc">
-                        {{ Helper::preview($action->desc, 20) }}
+                        {{ Helper::preview($action->desc, 10) }}
                     </div>
                     @if ($action->date_time && $action->time)
                     <div class="events-date"><span class="icon icon-calendar-1"></span>{{ Helper::rdate("d M", $action->date_time, true) }}, {{ $action->time }}</div>
@@ -394,6 +411,8 @@ arsort($overlap);
     ## Если что-то нашлось - выводим
 ?>
     @if (@count($objects))
+
+        <a name="advices"></a>
         <h3 id="advices_anch" class="clear-header big">
             Советы
         </h3>
@@ -448,6 +467,8 @@ foreach ($tags as $tag) {
     ## Если что-то нашлось - выводим
 ?>
     @if (@count($objects))
+
+        <a name="wheretobuy"></a>
         <h3 id="where2b_anch" class="clear-header big">
             Где купить
         </h3>

@@ -13,18 +13,16 @@
                     </header>
                     <div class="column left">
                         <div class="pict" style="background-image:url({{photo}})"></div>
-                        <script type="text/javascript" src="http://yandex.st/share/share.js"
-charset="utf-8"><{{!}}/script>
-<div class="yashare-auto-init" data-yashareL10n="ru"
- data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"
-
-></div>
+                        <script type="text/javascript" src="http://yandex.st/share/share.js" charset="utf-8"><{{!}}/script>
+                        <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"></div>
                         <div>
                             <div class="send-email-cont">
-                                <a class="send-email" id="send-email" href="#">Отправить по email</a>
+                                <a class="send-email" id="send-email" href="#" data-type="place" data-id="{{id}}">Отправить по email</a>
                                 <form class="send-email-form">
-                                    <input type="text"><!--
-                                 --><button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <input type="text" name="email" value="" class="input-email"><!--
+                                 -->
+                                    <button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <span class="error-email hidden">Введите корректный email-адрес</span>
                                 </form>
                             </div>
                         </div>
@@ -48,20 +46,18 @@ charset="utf-8"><{{!}}/script>
                     </header>
                     <div class="column left">
                         <div class="pict" style="background-image:url({{photo}})"></div>
-                        <script type="text/javascript" src="http://yandex.st/share/share.js"
-charset="utf-8"><{{!}}/script>
-<div class="yashare-auto-init" data-yashareL10n="ru"
- data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"
-
-></div>
+                        <script type="text/javascript" src="http://yandex.st/share/share.js" charset="utf-8"><{{!}}/script>
+                        <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareQuickServices="vkontakte,facebook,twitter,odnoklassniki" data-yashareTheme="counter"></div>
                         <div class="i-will" data-action-id="{{id}}">Я пойду</div>
-                        <span class="people-count">Уже идут <strong>34</strong></span>
+                        <span class="people-count{{#if total}}{{else}} hidden{{/if}}">Уже идут <strong>{{ total }}</strong></span>
                         <div>
                             <div class="send-email-cont">
-                                <a class="send-email" id="send-email" href="#">Отправить по email</a>
+                                <a class="send-email" id="send-email" href="#" data-type="action" data-id="{{id}}">Отправить по email</a>
                                 <form class="send-email-form">
-                                    <input type="text"><!--
-                                 --><button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <input type="text" name="email" value="" class="input-email"><!--
+                                 -->
+                                    <button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <span class="error-email hidden">Введите корректный email-адрес</span>
                                 </form>
                             </div>
                         </div>
@@ -70,25 +66,33 @@ charset="utf-8"><{{!}}/script>
                         {{{desc}}}
 
                         <div>
+                            {{#if date}}
                             <div class="column-50">
                                 <div class="column-head">Когда</div>
-                                <strong>{{date}}, {{time}}</strong>
+                                <strong>{{date}}{{#if time}}, {{time}}{{/if}}</strong>
                             </div>
+                            {{/if}}
 
+                            {{#if price}}
                             <div class="column-50">
                                 <div class="column-head">Цена</div>
                                 <strong>от {{price}} руб.</strong>
                             </div>
+                            {{/if}}
 
+                            {{#if where}}
                             <div class="column-50">
                                 <div class="column-head">Где</div>
                                 <strong>{{where}}</strong>
                             </div>
+                            {{/if}}
 
+                            {{#if web}}
                             <div class="column-50">
                                 <div class="column-head">В сети</div>
-                                <div><a href="http://{{web}}">{{web}}</a></div>
+                                <div><a href="{{web}}">{{web}}</a></div>
                             </div>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -114,10 +118,12 @@ charset="utf-8"><{{!}}/script>
 ></div>
                         <div>
                             <div class="send-email-cont">
-                                <a class="send-email" id="send-email" href="#">Отправить по email</a>
+                                <a class="send-email" id="send-email" href="#" data-type="advice" data-id="{{id}}">Отправить по email</a>
                                 <form class="send-email-form">
-                                    <input type="text"><!--
-                                 --><button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <input type="text" name="email" value="" class="input-email"><!--
+                                 -->
+                                    <button id="sendEmailSubmit" type="submit">Ок</button>
+                                    <span class="error-email hidden">Введите корректный email-адрес</span>
                                 </form>
                             </div>
                         </div>
