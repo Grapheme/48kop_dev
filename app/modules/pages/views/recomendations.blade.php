@@ -16,7 +16,7 @@ if (!Input::get('line'))
         <main class="recomendations">
             <h2>
                 Персональные рекомендации для вас<br>
-                на выходные 22-23 июня 2014 года
+                на выходные {{ Input::get('date') }} 2014 года
             </h2>
             <ul class="rec-filter">
                 <li class="rec-filter-li">

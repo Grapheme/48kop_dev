@@ -573,11 +573,16 @@ $alltags = $temp;
     var interests = ['Где купить', 'Места'];
     --}}
 
+    @if (@$preferences['family'])
     var family_fill = '<? if(@$preferences['family']) { echo @json_encode($preferences['family']); } ?>';
-    var interests = {{ @json_encode(@explode(",", @$preferences['tags'])) }};
-
     Family.fill(family_fill);
+    @endif
+
+    @if (@$preferences['tags'])
+    var interests = {{ @json_encode(@explode(",", @$preferences['tags'])) }};
     FamilyForm.inters(interests);
+    @endif
+
     </script>
 
 @stop
