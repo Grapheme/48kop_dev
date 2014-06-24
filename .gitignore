@@ -5,7 +5,7 @@ composer.phar
 composer.lock
 .DS_Store
 
-.htaccess
+#.htaccess
 *.clpprj
 Thumbs.db
 app/config/database.php
