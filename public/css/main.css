@@ -870,6 +870,22 @@ a:focus {
   color: #126cb6;
   background: #fff;
 }
+.repeat-btn {
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  display: inline-block;
+  border-radius: 2rem;
+  height: 3rem;
+  line-height: 3rem;
+  background: #2056a0;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 1.5rem;
+}
+.repeat-btn:hover {
+  color: #2056a0;
+  background: #fff;
+}
 .footer {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

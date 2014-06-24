@@ -502,6 +502,10 @@ foreach ($tags as $tag) {
         </ul>
     @endif
 
+    <div class="family-btn-cont">
+        <a href="{{URL::to('/')}}" class="repeat-btn">Попробовать еще раз</a>
+    </div>
+
 <?
 ####################################################################################
 
