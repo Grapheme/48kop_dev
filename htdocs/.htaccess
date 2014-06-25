@@ -2,6 +2,8 @@ AddDefaultCharset utf-8
 Options +FollowSymLinks
 Options -Indexes
 
+php_value display_errors 1
+
 <IfModule mod_rewrite.c>
     RewriteEngine on
 	RewriteRule (.*) /public/$1 [L]
